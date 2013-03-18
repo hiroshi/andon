@@ -17,7 +17,8 @@ Andon = {
     version: "0.0.0", // yet prototype version
     filters: {
         "safe": function(val) { return val; } // placeholder
-    }
+    },
+    debug: false // If true, print some log in console.
 }
 /*
   Andon.bind($target, firebase, options)
@@ -48,6 +49,7 @@ Andon.bind = function ($target, firebase, options) {
     var child_template = $target.children(".template");
     if (child_template.length > 0) {
         firebase.on("child_added", function(childSnapshot) {
+            Andon.debugLog("child_added: " + childSnapshot.ref().path);
             var $child = child_template.clone().removeClass("template")
                 .attr("data-path", childSnapshot.ref().path.toString());
             if (options.prepend) {
@@ -65,6 +67,7 @@ Andon.bind = function ($target, firebase, options) {
                 var filters = name_and_filters.slice(1);
                 //var func = options.functions[name];
                 childSnapshot.ref().child(path).on("value", function(valueSnapshot) {
+                    Andon.debugLog("value: " + valueSnapshot.ref().path);
                     if (ref) {
                         // e.g. "/users/$/nickname" -> "/users/1234/nickname"
                         var ref_path = ref.replace("$", valueSnapshot.val());
@@ -81,6 +84,7 @@ Andon.bind = function ($target, firebase, options) {
             });
         });
         firebase.on("child_moved", function(childSnapshot, prevChildName) {
+            Andon.debugLog("child_moved: " + childSnapshot.ref().path);
             var path = childSnapshot.ref().path.toString();
             var prev_path = prevChildName ? path.replace(childSnapshot.name(), prevChildName) : null;
             var $detached = $target.children("[data-path='" + path + "']").detach();
@@ -151,6 +155,11 @@ Andon.applyFilters = function (val, filters) {
         val = $("<pre>").text(val).html();
     }
     return val;
+}
+Andon.debugLog = function (message) {
+    if (this.debug) {
+        console.debug("Andon: " + message);
+    }
 }
 /*
   jQuery extension SerializeObject
