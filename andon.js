@@ -87,18 +87,18 @@ Andon.bind = function ($target, firebase, options) {
             Andon.debugLog("child_moved: " + childSnapshot.ref().path);
             var path = childSnapshot.ref().path.toString();
             var prev_path = prevChildName ? path.replace(childSnapshot.name(), prevChildName) : null;
-            var $detached = $target.children("[data-path='" + path + "']").detach();
+            var $child = $target.children("[data-path='" + path + "']").detach();
             if (options.prepend) {
                 if (prev_path) {
-                    $target.children("[data-path='" + prev_path + "']").before($detached);
+                    $target.children("[data-path='" + prev_path + "']").before($child);
                 } else {
-                    $target.prepend($detached);
+                    $target.prepend($child);
                 }
             } else {
                 if (prev_path) {
-                    $target.children("[data-path='" + prev_path + "']").after($detached);
+                    $target.children("[data-path='" + prev_path + "']").after($child);
                 } else {
-                    $target.append($detached);
+                    $target.append($child);
                 }
             }
         });
