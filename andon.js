@@ -7,7 +7,6 @@
 
   TODO: update form
   TODO: on("value") for a single object
-  TODO: on("child_removed) for a list
   TODO: The data attribute name "data-name" doesn't seem to be appropriate? "data-andon"?
 
   Author: Hiroshi Saito <hiroshi3110@gmail.com>
@@ -82,6 +81,12 @@ Andon.bind = function ($target, firebase, options) {
                     $name.html(Andon.applyFilters(valueSnapshot.val(), filters));
                 });
             });
+        });
+        firebase.on("child_removed", function(childSnapshot) {
+            Andon.debugLog("child_removed: " + childSnapshot.ref().path);
+            var path = childSnapshot.ref().path.toString();
+            var $child = $target.children("[data-path='" + path + "']").detach();
+            $child.remove();
         });
         firebase.on("child_moved", function(childSnapshot, prevChildName) {
             Andon.debugLog("child_moved: " + childSnapshot.ref().path);
