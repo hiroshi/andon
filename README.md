@@ -1,8 +1,9 @@
 andon.js
 ========
 
-Bind DOM with Firebase
+Bind DOM with Firebase...,
 
+but I'm sorry, I abandon it in favor of https://github.com/hiroshi/KnockoutFire.
 
 Uage example
 ------------
